@@ -1,0 +1,33 @@
+# config.yaml
+
+thresholds:
+  alert: .35
+  warn: .25
+
+# change mycompany.com to whatever your company name is
+company_domain: mycompany.com
+
+# list any common cloud services or domains from which you
+# regularly receive email
+trusted_domains:
+ - sharepoint.com
+ - office.com
+ - m365.cloud.microsoft
+ - github.com
+ - percipio.com
+ - myworkday.com
+ - yammer.com
+
+phishy_words:
+ - urgent
+ - important
+ - now
+ - limited
+ - hurry
+ - required
+ - action
+ - click here
+ - go here
+
+#poll_interval is in minutes
+poll_interval: 10
