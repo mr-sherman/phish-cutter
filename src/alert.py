@@ -14,8 +14,4 @@ def warn(subject:str, sender:str):
     show_toast([f"{emoji.emojize(":warning:")}: Potential Phishing detected",f"sender: {sender}",f"subject: {subject}"])
     
 
-toaster = WindowsToaster("PhishCutter Alert")
-newToast = Toast()
-newToast.text_fields = [f"{emoji.emojize(":warning:")}Phishing detected",f"sender: bla@blah.com",f"subject: do blah"]
-toaster.show_toast(newToast)
 

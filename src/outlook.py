@@ -8,7 +8,7 @@ class outlook:
     # Constructor - open the outlook inbox
     def __init__(self):
         self.outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
-        self.inbox = outlook.GetDefaultFolder(DEFAULT_FOLDER)
+        self.inbox = self.outlook.GetDefaultFolder(DEFAULT_FOLDER)
 
     # return all emails since the timestamp
     def get_emails(self, timestamp):
