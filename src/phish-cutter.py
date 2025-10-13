@@ -5,6 +5,7 @@ from datetime import datetime
 from outlook import outlook
 import time
 import phish_analyzer as pa
+import alert
 
 PHISH_ANALYZER = None
 
@@ -42,10 +43,9 @@ def poll_email(mailbox, interval):
                     continue
                 score = PHISH_ANALYZER.analyze(e.SenderEmailAddress, e.Subject, e.Body)
                 if score > CONFIG["thresholds"]["alert"]:
-                    print(f"ALERT! Phishing email detected from {e.SenderEmailAddress}, subject = {e.Subject}\n")
+                    alert.alert(subject=e.Subject, sender=e.SenderEmailAddress)
                 elif score > CONFIG["thresholds"]["warn"]:
-                    print (f"Warning!  Potential - this looks phishy from {e.SenderEmailAddress}, Subject = {e.Subject}")
-
+                    alert.warn(subject=e.Subject, sender=e.SenderEmailAddress) 
             write_timestamp(LAST_RUN_FILE)
             time.sleep(interval)
 
