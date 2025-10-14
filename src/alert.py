@@ -9,9 +9,10 @@ def show_toast(text_fields):
 
 def alert(subject:str, sender:str):
     show_toast([f"{emoji.emojize(":police_car_light:")}: Phishing detected",f"sender: {sender}",f"subject: {subject}"])
-    
+    print(f"{emoji.emojize(":police_car_light:")}: Phishing detected.\n   Sender: {sender}\n  Subjct:{subject}")
 def warn(subject:str, sender:str):
     show_toast([f"{emoji.emojize(":warning:")}: Potential Phishing detected",f"sender: {sender}",f"subject: {subject}"])
-    
+    print(f"{emoji.emojize(":warning:")}: Potential Phishing detected.\n   Sender: {sender}\n  Subjct:{subject}")
+
 
 
