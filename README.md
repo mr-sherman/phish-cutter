@@ -17,7 +17,9 @@ Phish Cutter is written in Python and requires a Python runtime.  Your company m
 
 Configure the options in the config.yaml file.  Configuration options are below
 To run it, just execute:
+
 ``pip install -r requirements.txt``
+
 ``python src/phish-cutter.py``
 
 You may get an error message that Phish Cutter cannot open the outlook email.  Close all Outlook Windows, including the outlook in the system tray area of the task bar.  Then run Phish Cutter again and then open outlook.  If you see the Phish Cutter banner, you're good to go.
