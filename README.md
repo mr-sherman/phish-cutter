@@ -1,8 +1,7 @@
 # Phish Cutter
 
 ## Introduction
-Phish Cutter is a utility to help users of email identify potential phising attacks, particularly the nasty phising email tests often deployed by corporation.  
-
+Phish Cutter is a utility to help users of email identify potential phising attacks, particularly the nasty phising email tests often deployed by corporations.  
 These types of tools should be deployed by corporations to help their employees and make their companies more secure. 
 
 However, many companies see fit to try to ensnare their employees by giving them phising tests rather than giving them true tools that would help them.  The result is embarassment, time wasted on training, time wasted on attempting to identify phishing emails, and the potential that the employee may miss an actual phising attempt and put the company at risk.  
@@ -12,10 +11,12 @@ https://www.youtube.com/shorts/93rIWaoX6kQ
 
 Phish Cutter currently only works with Outlook and will not work with remote mailboxes.  It opens up the local Outlook file, watches for new emails every 10 minutes by default, and outputs to the command line when a phishy email is found.  
 
+It is recoverable, meaning that if you stop Phish Cutter or close your laptop, it will pick up from the last timestamp it checked.  It won't miss any emails between the time it stopped and the time it restarted.  It will, however, not survive a reboot, so you will have to run it upon restart.
+
 ## Usage
 Phish Cutter is written in Python and requires a Python runtime.  Your company many restrict the usage of Python.  Maybe if you ask nicely, they'll let you use it.
 
-Configure the options in the config.yaml file.  Configuration options are below
+Prior to running Phish Cutter, you should configure the options in the config/config.yaml file.  Configuration options are below
 To run it, just execute:
 
 ``pip install -r requirements.txt``
