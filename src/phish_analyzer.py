@@ -1,12 +1,20 @@
 from difflib import SequenceMatcher as sm
+import yaml
 
 class phish_analyzer:
-    def __init__(self, config):
-        self.trusted_domains = config["trusted_domains"]
-        self.company_domain = config["company_domain"]
-        self.phishy_words = config["phishy_words"]
-        self.alert = float(config["thresholds"]["alert"])
-        self.warn = float(config["thresholds"]["warn"])
+    def __load_config(self):
+        with open(self.config_filepath, 'r') as f:
+            self.config = yaml.safe_load(f)
+
+        self.trusted_domains = self.config["trusted_domains"]
+        self.company_domain = self.config["company_domain"]
+        self.phishy_words = self.config["phishy_words"]
+        self.alert = float(self.config["thresholds"]["alert"])
+        self.warn = float(self.config["thresholds"]["warn"])
+
+    def __init__(self, filepath):
+        self.config_filepath = filepath
+        self.__load_config()
     
     def __get_email__domain(self, email_address):
         try:
@@ -21,9 +29,13 @@ class phish_analyzer:
         except IndexError as i:
             pass
         return ""
-
+    
+    def get_config(self):
+        return self.config
+    
     def analyze(self, from_address, subject, body):
-        score = 0.0
+        self.__load_config()
+        
         domain = self.__get_email__domain(from_address)
         
         company_domain_score = 0.0
@@ -37,7 +49,9 @@ class phish_analyzer:
         # if the company domain and the domain of the sender 
         # are exactly the same then it's not phishing
         if company_domain_score == 1.0:
-            return 0.0    
+            return {"company_domain_score": 0.0, 
+                "trusted_domain_score": 0.0, 
+                "phishy_words_score": 0.0} 
         
         max_ratio = 0.0
         for w in self.trusted_domains:
@@ -45,7 +59,9 @@ class phish_analyzer:
             ratio = sm(None, trusted_domain.upper(), sender_domain.upper()).ratio()
             if ratio == 1.0:
                 trusted_domain_score = 0.0
-                return 0.0
+                return {"company_domain_score": 0.0, 
+                "trusted_domain_score": 0.0, 
+                "phishy_words_score": 0.0} 
             if ratio > 0.4 and ratio < 1.0:
                 if ratio > max_ratio:
                     max_ratio = ratio
@@ -57,4 +73,6 @@ class phish_analyzer:
                 phishy_words_score += 0.25
 
         final_score = company_domain_score  + trusted_domain_score + phishy_words_score
-        return final_score
+        return {"company_domain_score": company_domain_score, 
+                "trusted_domain_score": trusted_domain_score, 
+                "phishy_words_score": phishy_words_score}

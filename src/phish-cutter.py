@@ -1,5 +1,4 @@
 from difflib import SequenceMatcher as sm
-import yaml
 import pyfiglet
 from datetime import datetime
 from outlook import outlook
@@ -24,12 +23,7 @@ def read_timestamp(filename):
         timestamp = f.read()
     return timestamp
 
-def load_config(path):
-    with open(path, 'r') as f:
-        config = yaml.safe_load(f)
-    return config
-
-def poll_email(mailbox, interval):
+def poll_email(mailbox):
     try:
         while True:
             try:
@@ -41,15 +35,18 @@ def poll_email(mailbox, interval):
             for e in emails:
                 if e.SenderEmailType == "EX":
                     continue
-                score = PHISH_ANALYZER.analyze(e.SenderEmailAddress, e.Subject, e.Body)
-                if score > CONFIG["thresholds"]["alert"]:
-                    alert.alert(subject=e.Subject, sender=e.SenderEmailAddress)
-                elif score > CONFIG["thresholds"]["warn"]:
-                    alert.warn(subject=e.Subject, sender=e.SenderEmailAddress) 
+                score_breakdown = PHISH_ANALYZER.analyze(e.SenderEmailAddress, e.Subject, e.Body)
+                score = score_breakdown["company_domain_score"] + score_breakdown["trusted_domain_score"] + score_breakdown["phishy_words_score"]
+                if score > PHISH_ANALYZER.get_config()["thresholds"]["alert"]:
+                    alert.alert(subject=e.Subject, sender=e.SenderEmailAddress, score_breakdown=score_breakdown)
+                elif score > PHISH_ANALYZER.get_config()["thresholds"]["warn"]:
+                    alert.warn(subject=e.Subject, sender=e.SenderEmailAddress, score_breakdown=score_breakdown) 
             write_timestamp(LAST_RUN_FILE)
-            time.sleep(interval)
+            time.sleep(PHISH_ANALYZER.get_config()["poll_interval"])
 
     except KeyboardInterrupt:
+        pass
+    except Exception as ex:
         pass
     finally:
         write_timestamp(LAST_RUN_FILE)
@@ -59,16 +56,14 @@ if __name__ == "__main__":
     art_gen = pyfiglet.Figlet(font="doom")
     title = art_gen.renderText(PHISH_CUTTER)
 
-    CONFIG = load_config("config/config.yaml")
-    PHISH_ANALYZER = pa.phish_analyzer(CONFIG)
+    PHISH_ANALYZER = pa.phish_analyzer("config/config.yaml")
     try:
         mailbox = outlook()
 
         print(title)
         print("Control-C to stop")
 
-        poll_interval = CONFIG["poll_interval"]
-        poll_email(mailbox, poll_interval*60)
-    except:
+        poll_email(mailbox)
+    except Exception as e:
         print("Cannot open outlook email.\nClose all your outlook windows and shut down outlook from the system tray as well.\nThen re-run Phish Cutter")
     print("exiting")
