@@ -29,7 +29,8 @@ You may get an error message that Phish Cutter cannot open the outlook email.  C
 There are some  entities in the configuration which you'll want to modify:
  - ``company_domain``: the email domain of your company, i.e. gigamegacorp.com
  - ``trusted_domain``:  a list of trusted domains that your company may use, such as workday.com, or github.com or outlook.com.  Some common samples have been provided, but you may wish to add more or remove more as is the case.
- - ``phishy_words``:  often phising emails contain words to get you to hurry, such as "Action Required" or "Urgent".  They'll often ask you to "click here".  If you've seen such examples in your company tests or actual phishing emails, add them to your config, or open a pull request to include them in the sample config.  
+ - ``phishy_words``:  often phising emails contain words to get you to hurry, such as "Action Required" or "Urgent".  They'll often ask you to "click here".  If you've seen such examples in your company tests or actual phishing emails, add them to your config, or open a pull request to include them in the sample config. 
+ - ``phish_test_headers``: phishing tests will often include some type of headers so they can bypass the email security software so they can get sent through.  These headers can be vendor-specific.  Phish Cutter does not rely solely on these headers to identify phish, but it does use them if it finds them.  If you know which vendor your company uses, you can google to see which email header they use to identify phishing and add it.  
 
 You can also change the polling interval, which is given in minutes.
 
