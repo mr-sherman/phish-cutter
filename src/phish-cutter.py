@@ -35,7 +35,10 @@ def poll_email(mailbox):
             for e in emails:
                 if e.SenderEmailType == "EX":
                     continue
-                score_breakdown = PHISH_ANALYZER.analyze(e.SenderEmailAddress, e.Subject, e.Body)
+                prop_accessor = e.PropertyAccessor
+                header = prop_accessor.GetProperty("http://schemas.microsoft.com/mapi/proptag/0x007D001E")
+                
+                score_breakdown = PHISH_ANALYZER.analyze(e.SenderEmailAddress, e.Subject, e.Body, header)
                 score = score_breakdown["company_domain_score"] + score_breakdown["trusted_domain_score"] + score_breakdown["phishy_words_score"]
                 if score > PHISH_ANALYZER.get_config()["thresholds"]["alert"]:
                     alert.alert(subject=e.Subject, sender=e.SenderEmailAddress, score_breakdown=score_breakdown)

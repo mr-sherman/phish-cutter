@@ -14,7 +14,9 @@ def get_flag_text(score_breakdown:dict[str, float]):
     if score_breakdown["trusted_domain_score"] > 0.0:
         flags = flags  + " Trusted domain mismatch "
     if score_breakdown["phishy_words_score"] > 0.0:
-        flags = flags + " Urgency language " 
+        flags = flags + " Urgency language "
+    if score_breakdown["phish_test_score"] > 0.0:
+        flags = flags + " Phishing Exam "
 
     return flags
 
