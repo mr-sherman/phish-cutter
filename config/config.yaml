@@ -4,6 +4,13 @@ thresholds:
   alert: .35
   warn: .25
 
+# add phishtest headers - these are nonstandard and often vendor specific
+phish_test_headers:
+ - x-threatsim-id
+ - x-phishtest
+ - x-phishme 
+ - x-phish-crid
+ 
 # change mycompany.com to whatever your company name is
 company_domain: mycompany.com
 
