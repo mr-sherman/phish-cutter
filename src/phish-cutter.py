@@ -5,6 +5,8 @@ from outlook import outlook
 import time
 import phish_analyzer as pa
 import alert
+import os
+import yaml
 
 PHISH_ANALYZER = None
 
@@ -22,6 +24,49 @@ def read_timestamp(filename):
     with open(filename, "r") as f:
         timestamp = f.read()
     return timestamp
+
+def create_config():
+    default_config = {
+        "thresholds": 
+        {
+            "alert": .35,
+            "warn": .25
+        },
+        "phish_test_headers": [
+               "x-threatsim-id",
+                "x-phishtest",
+                "x-phishme",
+                "x-phish-crid"
+            ],
+        "company_domain": "my-company.com",
+        "trusted_domains": [
+            "sharepoint.com",
+            "office.com",
+            "m365.cloud.microsoft",
+            "github.com",
+            "percipio.com",
+            "myworkday.com",
+            "yammer.com"
+        ],
+        "phishy_words":[
+            "urgent",
+            "important",
+            "now",
+            "limited",
+            "hurry",
+            "required",
+            "action",
+            "click here",
+            "go here"
+        ],
+        "poll_interval":10
+    }
+    if not os.path.exists("./config"):
+        os.mkdir("./config")
+    with open("config/config.yaml", "w") as f:
+        f.write(yaml.dump(default_config))
+    
+        
 
 def poll_email(mailbox):
     try:
@@ -58,7 +103,8 @@ def poll_email(mailbox):
 if __name__ == "__main__":
     art_gen = pyfiglet.Figlet(font="doom")
     title = art_gen.renderText(PHISH_CUTTER)
-
+    if not os.path.exists("config/config.yaml"):
+        create_config()
     PHISH_ANALYZER = pa.phish_analyzer("config/config.yaml")
     try:
         mailbox = outlook()

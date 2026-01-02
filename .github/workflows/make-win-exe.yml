@@ -1,0 +1,48 @@
+name: Create Windows Exe
+
+on:
+  release:
+    types: [published] # This specifies that the workflow triggers only when a release is published.
+                      # Other types include 'created', 'edited', 'deleted', 'prereleased', 'released', 'unpublished'.
+
+jobs:
+    build:
+        runs-on: windows-latest
+        permissions: 
+          contents: write
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+
+            - name: Set up Python
+              uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+
+              with:
+                python-version: '3.12'
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install pyinstaller
+                pip install -r requirements.txt
+            - name: Build Executable with PyInstaller
+              run: pyinstaller src/phish-cutter.py --onefile --collect-all pyfiglet
+### Do we eventually want to do a windows installer?
+#            - name: Install wix toolset
+#              run: winget install WiXToolset.WiXCLI
+
+            - name: Create Zip Archive
+              shell: powershell
+              run: |
+                Compress-Archive -Path 'dist\phish-cutter.exe' -DestinationPath '.\phish-cutter-windows.zip'
+            - name: Upload Artifact
+              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+              with:
+                name: phish-cutter-windows
+                path: phish-cutter-windows.zip
+            - name: upload release
+              shell: powershell
+              env:
+                GH_TOKEN: ${{ github.token }}
+              run: |
+                gh release upload ${{ github.event.release.tag_name }} phish-cutter-windows.zip
