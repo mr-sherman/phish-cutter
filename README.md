@@ -14,14 +14,19 @@ Phish Cutter currently only works with Outlook and will not work with remote mai
 It is recoverable, meaning that if you stop Phish Cutter or close your laptop, it will pick up from the last timestamp it checked.  It won't miss any emails between the time it stopped and the time it restarted.  It will, however, not survive a reboot, so you will have to run it upon restart.
 
 ## Usage
-Phish Cutter is written in Python and requires a Python runtime.  Your company many restrict the usage of Python.  Maybe if you ask nicely, they'll let you use it.
+Phish Cutter is written in Python but a Windows executable can be downloaded from the "Releases" page.  You will have to set up any executable paths.  A Windows installer is not available yet.
 
-Prior to running Phish Cutter, you should configure the options in the config/config.yaml file.  Configuration options are below
+Should you want to eschew the Windows executable you can deploy it yourself by downloading the source code.  Just set up the requirements and execute the program.
 To run it, just execute:
 
 ``pip install -r requirements.txt``
 
 ``python src/phish-cutter.py``
+
+If you use the Windows executable, unzip it to any directory, fire up a Windows terminal:
+``cd <phish cutter directory>``
+``.\phish-cutter.exe``
+Upon running phish cutter for the first time, it will create a default configuration and write to config/config.yaml.  You must modify that file with your company email domain and list of trusted domains.  Configuration options are listed in their own section below.
 
 You may get an error message that Phish Cutter cannot open the outlook email.  Close all Outlook Windows, including the outlook in the system tray area of the task bar.  Then run Phish Cutter again and then open outlook.  If you see the Phish Cutter banner, you're good to go.
 
