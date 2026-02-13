@@ -7,7 +7,17 @@ class outlook:
 
     # Constructor - open the outlook inbox
     def __init__(self):
-        self.outlook = win32com.client.Dispatch("Outlook.Application").GetNamespace("MAPI")
+        try:
+    # Try to get the already running instance of Outlook
+            outlook = win32com.client.GetActiveObject("Outlook.Application")
+        except Exception as e:
+    # If not running, create a new instance
+            try:
+                outlook = win32com.client.Dispatch("Outlook.Application")
+            except Exception as e:
+                print(f"Error: Could not connect or start Outlook. {e}")
+                raise e
+        self.outlook = outlook.GetNamespace("MAPI")
         self.inbox = self.outlook.GetDefaultFolder(DEFAULT_FOLDER)
 
     # return all emails since the timestamp
