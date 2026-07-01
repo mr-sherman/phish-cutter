@@ -9,7 +9,7 @@ However, many companies see fit to try to ensnare their employees by giving them
 For a humorous take on company phishing tests, I recommend this video:
 https://www.youtube.com/shorts/93rIWaoX6kQ
 
-Phish Cutter currently only works with Outlook and will not work with remote mailboxes.  It opens up the local Outlook file, watches for new emails every 10 minutes by default, and outputs to the command line when a phishy email is found.  
+Phish Cutter currently only works with Outlook and will not work with remote mailboxes.  It opens up the local Outlook file, watches for new emails as they arrive (using Outlook's new-mail notifications), and outputs to the command line when a phishy email is found.  
 
 It is recoverable, meaning that if you stop Phish Cutter or close your laptop, it will pick up from the last timestamp it checked.  It won't miss any emails between the time it stopped and the time it restarted.  It will, however, not survive a reboot, so you will have to run it upon restart.
 
@@ -36,8 +36,6 @@ There are some  entities in the configuration which you'll want to modify:
  - ``trusted_domain``:  a list of trusted domains that your company may use, such as workday.com, or github.com or outlook.com.  Some common samples have been provided, but you may wish to add more or remove more as is the case.
  - ``phishy_words``:  often phising emails contain words to get you to hurry, such as "Action Required" or "Urgent".  They'll often ask you to "click here".  If you've seen such examples in your company tests or actual phishing emails, add them to your config, or open a pull request to include them in the sample config. 
  - ``phish_test_headers``: phishing tests will often include some type of headers so they can bypass the email security software so they can get sent through.  These headers can be vendor-specific.  Phish Cutter does not rely solely on these headers to identify phish, but it does use them if it finds them.  If you know which vendor your company uses, you can google to see which email header they use to identify phishing and add it.  
-
-You can also change the polling interval, which is given in minutes.
 
 ## Future Work
 This only works with Outlook with a local outlook archive.  Microsoft makes it difficult to create PATs for accessing email in the cloud.
